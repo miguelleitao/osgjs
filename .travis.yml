@@ -26,6 +26,23 @@ install:
 
 script: if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then grunt check --verbose && grunt build --verbose && grunt test --verbose ; fi
 
+pages:
+  image: alpine
+  before_script: 
+    - apk update
+    - apk add ttf-freefont graphviz
+    - apk add doxygen
+    - apk add git
+  script:
+    - doxygen doc/manual.cfg
+    - mv doc/html public
+    - cp doc/dris.png public/
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
+
 
 notifications:
   webhooks:
